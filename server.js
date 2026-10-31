@@ -20,7 +20,11 @@ app.use('/api', (req, res) => res.status(404).json({ error: 'Не найдено
 app.use((err, req, res, next) => {
     const status = err.status || err.statusCode || 500;
     if (status >= 500) console.error(err);
-    res.status(status).json({ error: status >= 500 ? 'Внутренняя ошибка сервера' : err.message });
+
+    res.status(status).json({
+        error: status >= 500 ? 'Внутренняя ошибка сервера' : err.message,
+        details: err.details,
+    });
 });
 
 app.listen(PORT, () => {

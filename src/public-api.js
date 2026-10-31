@@ -53,7 +53,7 @@ router.post('/forms/:id/events', (req, res) => {
         update((data) => {
             const now = new Date().toISOString();
             const session = getSession(data, form.id, sessionId, now);
-            if (type !== 'open') session.startedAt ??= now;
+            if (type === 'start') session.startedAt ??= now;
             if (type === 'field') session.lastFieldId = fieldId;
         });
     }

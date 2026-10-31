@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "Конструктор форм отклика для карьерной платформы",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },

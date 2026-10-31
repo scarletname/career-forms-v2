@@ -1,6 +1,7 @@
 const path = require('node:path');
 const express = require('express');
 const api = require('./src/api');
+const publicApi = require('./src/public-api');
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
@@ -12,6 +13,7 @@ app.get('/', (req, res) => res.redirect('/admin'));
 app.get('/admin', (req, res) => res.sendFile(path.join(PUBLIC_DIR, 'admin', 'index.html')));
 app.get('/f/:id', (req, res) => res.sendFile(path.join(PUBLIC_DIR, 'form', 'index.html')));
 
+app.use('/api/public', publicApi);
 app.use('/api', api);
 app.use(express.static(PUBLIC_DIR));
 

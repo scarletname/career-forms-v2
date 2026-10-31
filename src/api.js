@@ -85,4 +85,30 @@ router.post('/forms/:id/status', (req, res) => {
     res.json(form);
 });
 
+router.get('/forms/:id/responses', (req, res) => {
+    const form = findForm(req.params.id);
+    const list = db.responses
+        .filter((r) => r.formId === form.id)
+        .sort((a, b) => b.submittedAt.localeCompare(a.submittedAt));
+    res.json(list);
+});
+
+router.get('/forms/:id/stats', (req, res) => {
+    const form = findForm(req.params.id);
+    const sessions = db.sessions.filter((s) => s.formId === form.id);
+    const abandoned = sessions.filter((s) => s.startedAt && !s.submittedAt);
+
+    res.json({
+        opened: sessions.length,
+        started: sessions.filter((s) => s.startedAt).length,
+        submitted: sessions.filter((s) => s.submittedAt).length,
+        responses: db.responses.filter((r) => r.formId === form.id).length,
+        dropOff: form.fields.map((field) => ({
+            fieldId: field.id,
+            label: field.label,
+            count: abandoned.filter((s) => s.lastFieldId === field.id).length,
+        })),
+    });
+});
+
 module.exports = router;
